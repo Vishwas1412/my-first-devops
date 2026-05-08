@@ -1,8 +1,273 @@
+
 <!DOCTYPE html>
-<html>
-  <head><title>My DevOps Project</title></head>
-  <body>
-    <h1>🚀 Hello! My First DevOps Project</h1>
-    <p>Deployed automatically using GitHub + Netlify!</p>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DevOps Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0e1a; --bg2: #111827; --bg3: #1a2235; --card: #141c2e;
+      --border: rgba(99,179,237,0.15); --accent: #63b3ed; --accent2: #9f7aea;
+      --accent3: #68d391; --accent4: #f6ad55; --text: #e2e8f0; --muted: #718096;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+    nav {
+      position: fixed; top: 0; width: 100%; z-index: 100;
+      background: rgba(10,14,26,0.85); backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border); padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between; height: 60px;
+    }
+    .nav-logo { font-weight: 700; font-size: 1.1rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--accent); }
+    .hero {
+      min-height: 100vh; display: flex; align-items: center; justify-content: center;
+      text-align: center; padding: 6rem 2rem 4rem; position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99,179,237,0.12) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 80% 60%, rgba(159,122,234,0.08) 0%, transparent 60%);
+    }
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image: linear-gradient(rgba(99,179,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    .hero-content { position: relative; max-width: 750px; }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(99,179,237,0.1); border: 1px solid rgba(99,179,237,0.25);
+      border-radius: 100px; padding: 6px 16px; font-size: 0.8rem; color: var(--accent); margin-bottom: 1.5rem;
+    }
+    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent3); animation: pulse 2s infinite; display: inline-block; }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+    h1 { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.25rem; }
+    .gradient-text { background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { font-size: 1.15rem; color: var(--muted); max-width: 540px; margin: 0 auto 2.5rem; }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn { padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
+    .btn-primary { background: var(--accent); color: #0a0e1a; }
+    .btn-primary:hover { background: #90cdf4; transform: translateY(-2px); }
+    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+    .stats {
+      background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      padding: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; text-align: center;
+    }
+    .stat-num { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+    section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-tag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
+    .section-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; margin-bottom: 1rem; }
+    .section-sub { color: var(--muted); max-width: 520px; margin-bottom: 3rem; }
+    .pipeline { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 3rem; }
+    .pipe-step { flex: 1; min-width: 110px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1rem; text-align: center; position: relative; }
+    .pipe-step:not(:last-child)::after { content: '→'; position: absolute; right: -18px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 1.2rem; z-index: 1; }
+    .pipe-step + .pipe-step { margin-left: 24px; }
+    .pipe-icon { font-size: 1.6rem; margin-bottom: 8px; }
+    .pipe-name { font-size: 0.8rem; font-weight: 600; color: var(--text); }
+    .pipe-tech { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+    .pipe-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent3); margin: 6px auto 0; animation: pulse 2s infinite; }
+    .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+    .tech-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; transition: border-color 0.2s, transform 0.2s; }
+    .tech-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .tech-card-icon { font-size: 1.8rem; margin-bottom: 10px; }
+    .tech-card-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+    .tech-card-desc { font-size: 0.8rem; color: var(--muted); }
+    .tech-card-tag { display: inline-block; margin-top: 10px; font-size: 0.7rem; padding: 3px 10px; border-radius: 100px; font-weight: 600; }
+    .tag-blue { background: rgba(99,179,237,0.12); color: var(--accent); }
+    .tag-purple { background: rgba(159,122,234,0.12); color: var(--accent2); }
+    .tag-green { background: rgba(104,211,145,0.12); color: var(--accent3); }
+    .tag-orange { background: rgba(246,173,85,0.12); color: var(--accent4); }
+    .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start; margin-bottom: 1rem; transition: border-color 0.2s; }
+    .project-card:hover { border-color: rgba(99,179,237,0.35); }
+    .proj-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
+    .proj-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
+    .proj-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .proj-tag { font-size: 0.72rem; padding: 4px 10px; border-radius: 100px; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); }
+    .proj-status { font-size: 0.75rem; font-weight: 600; padding: 6px 14px; border-radius: 100px; white-space: nowrap; background: rgba(104,211,145,0.12); color: var(--accent3); border: 1px solid rgba(104,211,145,0.2); }
+    .terminal { background: #0d1117; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 2rem 0; }
+    .term-bar { background: #161b22; padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
+    .term-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .term-title { font-size: 0.8rem; color: var(--muted); margin-left: auto; font-family: 'Fira Code', monospace; }
+    .term-body { padding: 1.5rem; font-family: 'Fira Code', monospace; font-size: 0.85rem; line-height: 1.8; }
+    .term-prompt { color: var(--accent3); }
+    .term-cmd { color: var(--text); }
+    .term-out { color: var(--muted); }
+    .term-success { color: var(--accent3); }
+    .term-info { color: var(--accent); }
+    .skill-row { margin-bottom: 1.25rem; }
+    .skill-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
+    .skill-pct { color: var(--muted); font-size: 0.8rem; }
+    .skill-track { height: 6px; background: var(--bg3); border-radius: 100px; overflow: hidden; }
+    .skill-fill { height: 100%; border-radius: 100px; }
+    .fill-blue { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+    .fill-green { background: linear-gradient(90deg, var(--accent3), #38a169); }
+    .fill-orange { background: linear-gradient(90deg, var(--accent4), #ed8936); }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .contact-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; transition: border-color 0.2s, transform 0.2s; text-decoration: none; color: var(--text); }
+    .contact-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+    .contact-icon { font-size: 1.6rem; }
+    .contact-label { font-size: 0.75rem; color: var(--muted); }
+    .contact-val { font-weight: 600; font-size: 0.95rem; }
+    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem; }
+    footer span { color: var(--accent); }
+    @media (max-width: 640px) {
+      .pipeline { flex-direction: column; }
+      .pipe-step { width: 100%; }
+      .pipe-step:not(:last-child)::after { content: '↓'; right: 50%; top: auto; bottom: -18px; transform: translateX(50%); }
+      .pipe-step + .pipe-step { margin-left: 0; margin-top: 24px; }
+      .contact-grid { grid-template-columns: 1fr; }
+      .project-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">⚡ DevOps.io</div>
+  <ul class="nav-links">
+    <li><a href="#pipeline">Pipeline</a></li>
+    <li><a href="#stack">Stack</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> Available for DevOps Projects</div>
+    <h1>Building <span class="gradient-text">Scalable</span><br/>Infrastructure</h1>
+    <p>Automating deployments, streamlining pipelines, and delivering reliable systems at scale. From code to cloud — faster than ever.</p>
+    <div class="hero-btns">
+      <a href="#projects" class="btn btn-primary">🚀 View Projects</a>
+      <a href="#contact" class="btn btn-secondary">✉️ Get in Touch</a>
+    </div>
+  </div>
+</div>
+
+<div class="stats">
+  <div><div class="stat-num">12+</div><div class="stat-label">Projects Deployed</div></div>
+  <div><div class="stat-num">99.9%</div><div class="stat-label">Uptime Achieved</div></div>
+  <div><div class="stat-num">5x</div><div class="stat-label">Faster Deployments</div></div>
+  <div><div class="stat-num">3</div><div class="stat-label">Cloud Platforms</div></div>
+</div>
+
+<section id="pipeline">
+  <div class="section-tag">How It Works</div>
+  <h2 class="section-title">CI/CD Pipeline</h2>
+  <p class="section-sub">Every code push automatically triggers a full build, test, and deploy cycle — zero manual steps.</p>
+  <div class="pipeline">
+    <div class="pipe-step"><div class="pipe-icon">💻</div><div class="pipe-name">Code Push</div><div class="pipe-tech">Git / GitHub</div><div class="pipe-dot"></div></div>
+    <div class="pipe-step"><div class="pipe-icon">⚙️</div><div class="pipe-name">Build</div><div class="pipe-tech">GitHub Actions</div><div class="pipe-dot"></div></div>
+    <div class="pipe-step"><div class="pipe-icon">🧪</div><div class="pipe-name">Test</div><div class="pipe-tech">Jest / Pytest</div><div class="pipe-dot"></div></div>
+    <div class="pipe-step"><div class="pipe-icon">🐳</div><div class="pipe-name">Containerize</div><div class="pipe-tech">Docker</div><div class="pipe-dot"></div></div>
+    <div class="pipe-step"><div class="pipe-icon">🚀</div><div class="pipe-name">Deploy</div><div class="pipe-tech">Netlify / AWS</div><div class="pipe-dot"></div></div>
+  </div>
+  <div class="terminal">
+    <div class="term-bar">
+      <div class="term-dot" style="background:#ff5f57"></div>
+      <div class="term-dot" style="background:#febc2e"></div>
+      <div class="term-dot" style="background:#28c840"></div>
+      <div class="term-title">bash — pipeline.sh</div>
+    </div>
+    <div class="term-body">
+      <div><span class="term-prompt">$ </span><span class="term-cmd">git push origin main</span></div>
+      <div class="term-out">Enumerating objects: 5 done.</div>
+      <div class="term-out">Writing objects: 100% (3/3), 1.23 KiB | 1.23 MiB/s, done.</div>
+      <div><span class="term-prompt">$ </span><span class="term-cmd">github-actions → trigger: push</span></div>
+      <div class="term-info">▶  Running workflow: deploy.yml</div>
+      <div class="term-out">&nbsp;&nbsp;✓ Install dependencies &nbsp;&nbsp;&nbsp;<span class="term-success">2.3s</span></div>
+      <div class="term-out">&nbsp;&nbsp;✓ Run tests (14 passed)&nbsp;&nbsp;<span class="term-success">8.1s</span></div>
+      <div class="term-out">&nbsp;&nbsp;✓ Build Docker image &nbsp;&nbsp;&nbsp;&nbsp;<span class="term-success">12.4s</span></div>
+      <div class="term-out">&nbsp;&nbsp;✓ Push to registry &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-success">4.2s</span></div>
+      <div class="term-success">✅ Deployed to production! Site live at https://myapp.netlify.app</div>
+    </div>
+  </div>
+</section>
+
+<div style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+<section id="stack" style="max-width: 1100px;">
+  <div class="section-tag">Tools & Technologies</div>
+  <h2 class="section-title">My Tech Stack</h2>
+  <p class="section-sub">The tools I use to build, ship, and monitor production-grade systems.</p>
+  <div class="tech-grid">
+    <div class="tech-card"><div class="tech-card-icon">🐙</div><div class="tech-card-name">GitHub Actions</div><div class="tech-card-desc">Automate workflows directly from your repo on every push or PR.</div><span class="tech-card-tag tag-blue">CI/CD</span></div>
+    <div class="tech-card"><div class="tech-card-icon">🐳</div><div class="tech-card-name">Docker</div><div class="tech-card-desc">Package apps into containers that run anywhere, consistently.</div><span class="tech-card-tag tag-blue">Container</span></div>
+    <div class="tech-card"><div class="tech-card-icon">☸️</div><div class="tech-card-name">Kubernetes</div><div class="tech-card-desc">Orchestrate and scale containerized workloads in production.</div><span class="tech-card-tag tag-purple">Orchestration</span></div>
+    <div class="tech-card"><div class="tech-card-icon">🌍</div><div class="tech-card-name">Terraform</div><div class="tech-card-desc">Define and provision cloud infrastructure as code.</div><span class="tech-card-tag tag-purple">IaC</span></div>
+    <div class="tech-card"><div class="tech-card-icon">☁️</div><div class="tech-card-name">AWS / GCP</div><div class="tech-card-desc">Deploy, scale, and manage apps on the world's top cloud platforms.</div><span class="tech-card-tag tag-orange">Cloud</span></div>
+    <div class="tech-card"><div class="tech-card-icon">📊</div><div class="tech-card-name">Grafana + Prometheus</div><div class="tech-card-desc">Real-time monitoring, dashboards, and alerting for all services.</div><span class="tech-card-tag tag-green">Monitoring</span></div>
+    <div class="tech-card"><div class="tech-card-icon">🔒</div><div class="tech-card-name">Vault</div><div class="tech-card-desc">Securely store and manage secrets, tokens, and credentials.</div><span class="tech-card-tag tag-orange">Security</span></div>
+    <div class="tech-card"><div class="tech-card-icon">🔧</div><div class="tech-card-name">Ansible</div><div class="tech-card-desc">Automate server configuration and application deployment.</div><span class="tech-card-tag tag-green">Automation</span></div>
+  </div>
+</section>
+</div>
+
+<section id="projects">
+  <div class="section-tag">Work</div>
+  <h2 class="section-title">Featured Projects</h2>
+  <p class="section-sub">Real-world DevOps projects built from scratch.</p>
+  <div class="project-card">
+    <div>
+      <div class="proj-title">🚀 Auto-Deploy Pipeline</div>
+      <div class="proj-desc">Built a full CI/CD pipeline using GitHub Actions. Every push to main triggers automated testing, Docker build, and live deployment to Netlify — completely hands-free.</div>
+      <div class="proj-tags"><span class="proj-tag">GitHub Actions</span><span class="proj-tag">Docker</span><span class="proj-tag">Netlify</span><span class="proj-tag">YAML</span></div>
+    </div>
+    <div class="proj-status">✅ Live</div>
+  </div>
+  <div class="project-card">
+    <div>
+      <div class="proj-title">🐳 Dockerized Microservice App</div>
+      <div class="proj-desc">Containerized a Node.js REST API with Docker Compose. Includes Nginx reverse proxy, PostgreSQL database, and Redis caching — all spun up with a single command.</div>
+      <div class="proj-tags"><span class="proj-tag">Docker Compose</span><span class="proj-tag">Node.js</span><span class="proj-tag">Nginx</span><span class="proj-tag">PostgreSQL</span></div>
+    </div>
+    <div class="proj-status">✅ Live</div>
+  </div>
+  <div class="project-card">
+    <div>
+      <div class="proj-title">📊 Infrastructure Monitoring Dashboard</div>
+      <div class="proj-desc">Set up Prometheus + Grafana to monitor server CPU, memory, and request latency. Configured custom alerts to Slack when thresholds are breached.</div>
+      <div class="proj-tags"><span class="proj-tag">Grafana</span><span class="proj-tag">Prometheus</span><span class="proj-tag">AWS EC2</span><span class="proj-tag">Slack Alerts</span></div>
+    </div>
+    <div class="proj-status" style="background:rgba(246,173,85,0.12);color:#f6ad55;border-color:rgba(246,173,85,0.2);">🔧 In Progress</div>
+  </div>
+</section>
+
+<div style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
+<section style="max-width: 700px;">
+  <div class="section-tag">Proficiency</div>
+  <h2 class="section-title">Skills</h2>
+  <div style="margin-top: 2rem;">
+    <div class="skill-row"><div class="skill-header"><span>GitHub Actions / CI-CD</span><span class="skill-pct">90%</span></div><div class="skill-track"><div class="skill-fill fill-blue" style="width:90%"></div></div></div>
+    <div class="skill-row"><div class="skill-header"><span>Docker & Containers</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill fill-blue" style="width:85%"></div></div></div>
+    <div class="skill-row"><div class="skill-header"><span>Linux & Bash Scripting</span><span class="skill-pct">80%</span></div><div class="skill-track"><div class="skill-fill fill-green" style="width:80%"></div></div></div>
+    <div class="skill-row"><div class="skill-header"><span>AWS Cloud Services</span><span class="skill-pct">70%</span></div><div class="skill-track"><div class="skill-fill fill-orange" style="width:70%"></div></div></div>
+    <div class="skill-row"><div class="skill-header"><span>Kubernetes</span><span class="skill-pct">60%</span></div><div class="skill-track"><div class="skill-fill fill-green" style="width:60%"></div></div></div>
+    <div class="skill-row"><div class="skill-header"><span>Terraform / IaC</span><span class="skill-pct">65%</span></div><div class="skill-track"><div class="skill-fill fill-orange" style="width:65%"></div></div></div>
+  </div>
+</section>
+</div>
+
+<section id="contact">
+  <div class="section-tag">Let's Talk</div>
+  <h2 class="section-title">Get in Touch</h2>
+  <p class="section-sub">Open to DevOps roles, freelance projects, and collaborations.</p>
+  <div class="contact-grid">
+    <a href="mailto:yourname@email.com" class="contact-card"><div class="contact-icon">✉️</div><div><div class="contact-label">Email</div><div class="contact-val">yourname@email.com</div></div></a>
+    <a href="https://github.com" target="_blank" class="contact-card"><div class="contact-icon">🐙</div><div><div class="contact-label">GitHub</div><div class="contact-val">github.com/yourname</div></div></a>
+    <a href="https://linkedin.com" target="_blank" class="contact-card"><div class="contact-icon">💼</div><div><div class="contact-label">LinkedIn</div><div class="contact-label">Connect with me</div></div></a>
+    <a href="#" class="contact-card"><div class="contact-icon">📄</div><div><div class="contact-label">Resume</div><div class="contact-val">Download PDF</div></div></a>
+  </div>
+</section>
+
+<footer>Built with ❤️ and deployed via <span>GitHub Actions + Netlify</span> · © 2025</footer>
+</body>
 </html>
+
