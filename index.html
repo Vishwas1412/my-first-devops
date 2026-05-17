@@ -1,273 +1,1159 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DevOps Portfolio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet"/>
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --bg: #0a0e1a; --bg2: #111827; --bg3: #1a2235; --card: #141c2e;
-      --border: rgba(99,179,237,0.15); --accent: #63b3ed; --accent2: #9f7aea;
-      --accent3: #68d391; --accent4: #f6ad55; --text: #e2e8f0; --muted: #718096;
-    }
-    html { scroll-behavior: smooth; }
-    body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
-    nav {
-      position: fixed; top: 0; width: 100%; z-index: 100;
-      background: rgba(10,14,26,0.85); backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border); padding: 0 2rem;
-      display: flex; align-items: center; justify-content: space-between; height: 60px;
-    }
-    .nav-logo { font-weight: 700; font-size: 1.1rem; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a { color: var(--muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-    .nav-links a:hover { color: var(--accent); }
-    .hero {
-      min-height: 100vh; display: flex; align-items: center; justify-content: center;
-      text-align: center; padding: 6rem 2rem 4rem; position: relative; overflow: hidden;
-    }
-    .hero::before {
-      content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(99,179,237,0.12) 0%, transparent 70%), radial-gradient(ellipse 40% 40% at 80% 60%, rgba(159,122,234,0.08) 0%, transparent 60%);
-    }
-    .hero-grid {
-      position: absolute; inset: 0;
-      background-image: linear-gradient(rgba(99,179,237,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(99,179,237,0.04) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
-    .hero-content { position: relative; max-width: 750px; }
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(99,179,237,0.1); border: 1px solid rgba(99,179,237,0.25);
-      border-radius: 100px; padding: 6px 16px; font-size: 0.8rem; color: var(--accent); margin-bottom: 1.5rem;
-    }
-    .hero-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent3); animation: pulse 2s infinite; display: inline-block; }
-    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
-    h1 { font-size: clamp(2.2rem, 6vw, 4rem); font-weight: 800; line-height: 1.15; margin-bottom: 1.25rem; }
-    .gradient-text { background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, var(--accent3) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .hero p { font-size: 1.15rem; color: var(--muted); max-width: 540px; margin: 0 auto 2.5rem; }
-    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn { padding: 12px 28px; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s; }
-    .btn-primary { background: var(--accent); color: #0a0e1a; }
-    .btn-primary:hover { background: #90cdf4; transform: translateY(-2px); }
-    .btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
-    .stats {
-      background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-      padding: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; text-align: center;
-    }
-    .stat-num { font-size: 2rem; font-weight: 800; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
-    section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
-    .section-tag { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.5rem; }
-    .section-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 700; margin-bottom: 1rem; }
-    .section-sub { color: var(--muted); max-width: 520px; margin-bottom: 3rem; }
-    .pipeline { display: flex; align-items: center; flex-wrap: wrap; gap: 0; margin-bottom: 3rem; }
-    .pipe-step { flex: 1; min-width: 110px; background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.25rem 1rem; text-align: center; position: relative; }
-    .pipe-step:not(:last-child)::after { content: '→'; position: absolute; right: -18px; top: 50%; transform: translateY(-50%); color: var(--accent); font-size: 1.2rem; z-index: 1; }
-    .pipe-step + .pipe-step { margin-left: 24px; }
-    .pipe-icon { font-size: 1.6rem; margin-bottom: 8px; }
-    .pipe-name { font-size: 0.8rem; font-weight: 600; color: var(--text); }
-    .pipe-tech { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
-    .pipe-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent3); margin: 6px auto 0; animation: pulse 2s infinite; }
-    .tech-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
-    .tech-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; transition: border-color 0.2s, transform 0.2s; }
-    .tech-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-    .tech-card-icon { font-size: 1.8rem; margin-bottom: 10px; }
-    .tech-card-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
-    .tech-card-desc { font-size: 0.8rem; color: var(--muted); }
-    .tech-card-tag { display: inline-block; margin-top: 10px; font-size: 0.7rem; padding: 3px 10px; border-radius: 100px; font-weight: 600; }
-    .tag-blue { background: rgba(99,179,237,0.12); color: var(--accent); }
-    .tag-purple { background: rgba(159,122,234,0.12); color: var(--accent2); }
-    .tag-green { background: rgba(104,211,145,0.12); color: var(--accent3); }
-    .tag-orange { background: rgba(246,173,85,0.12); color: var(--accent4); }
-    .project-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 2rem; display: grid; grid-template-columns: 1fr auto; gap: 1.5rem; align-items: start; margin-bottom: 1rem; transition: border-color 0.2s; }
-    .project-card:hover { border-color: rgba(99,179,237,0.35); }
-    .proj-title { font-size: 1.15rem; font-weight: 700; margin-bottom: 6px; }
-    .proj-desc { color: var(--muted); font-size: 0.9rem; margin-bottom: 1rem; }
-    .proj-tags { display: flex; gap: 6px; flex-wrap: wrap; }
-    .proj-tag { font-size: 0.72rem; padding: 4px 10px; border-radius: 100px; background: var(--bg3); border: 1px solid var(--border); color: var(--muted); }
-    .proj-status { font-size: 0.75rem; font-weight: 600; padding: 6px 14px; border-radius: 100px; white-space: nowrap; background: rgba(104,211,145,0.12); color: var(--accent3); border: 1px solid rgba(104,211,145,0.2); }
-    .terminal { background: #0d1117; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin: 2rem 0; }
-    .term-bar { background: #161b22; padding: 10px 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); }
-    .term-dot { width: 12px; height: 12px; border-radius: 50%; }
-    .term-title { font-size: 0.8rem; color: var(--muted); margin-left: auto; font-family: 'Fira Code', monospace; }
-    .term-body { padding: 1.5rem; font-family: 'Fira Code', monospace; font-size: 0.85rem; line-height: 1.8; }
-    .term-prompt { color: var(--accent3); }
-    .term-cmd { color: var(--text); }
-    .term-out { color: var(--muted); }
-    .term-success { color: var(--accent3); }
-    .term-info { color: var(--accent); }
-    .skill-row { margin-bottom: 1.25rem; }
-    .skill-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem; }
-    .skill-pct { color: var(--muted); font-size: 0.8rem; }
-    .skill-track { height: 6px; background: var(--bg3); border-radius: 100px; overflow: hidden; }
-    .skill-fill { height: 100%; border-radius: 100px; }
-    .fill-blue { background: linear-gradient(90deg, var(--accent), var(--accent2)); }
-    .fill-green { background: linear-gradient(90deg, var(--accent3), #38a169); }
-    .fill-orange { background: linear-gradient(90deg, var(--accent4), #ed8936); }
-    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .contact-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; transition: border-color 0.2s, transform 0.2s; text-decoration: none; color: var(--text); }
-    .contact-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-    .contact-icon { font-size: 1.6rem; }
-    .contact-label { font-size: 0.75rem; color: var(--muted); }
-    .contact-val { font-weight: 600; font-size: 0.95rem; }
-    footer { text-align: center; padding: 2rem; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.85rem; }
-    footer span { color: var(--accent); }
-    @media (max-width: 640px) {
-      .pipeline { flex-direction: column; }
-      .pipe-step { width: 100%; }
-      .pipe-step:not(:last-child)::after { content: '↓'; right: 50%; top: auto; bottom: -18px; transform: translateX(50%); }
-      .pipe-step + .pipe-step { margin-left: 0; margin-top: 24px; }
-      .contact-grid { grid-template-columns: 1fr; }
-      .project-card { grid-template-columns: 1fr; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodHub - Order Food Online</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff5757;
+            --primary-dark: #e63946;
+            --secondary: #2d3142;
+            --accent: #ffd700;
+            --light-gray: #f5f5f7;
+            --gray: #e8e8e8;
+            --dark-gray: #666;
+            --text-dark: #1a1a1a;
+            --text-light: #666;
+            --border-radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #fff;
+            color: var(--text-dark);
+            overflow-x: hidden;
+        }
+
+        /* ============ HEADER ============ */
+        .header {
+            background: linear-gradient(135deg, #ff5757 0%, #ff7f7f 100%);
+            padding: 20px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(255, 87, 87, 0.15);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -1px;
+        }
+
+        .logo span {
+            background: white;
+            color: #ff5757;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 24px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 16px;
+            border-radius: 25px;
+            flex: 1;
+            max-width: 400px;
+            gap: 10px;
+        }
+
+        .search-bar input {
+            border: none;
+            outline: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .search-bar input::placeholder {
+            color: var(--dark-gray);
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 28px;
+            color: white;
+            transition: var(--transition);
+        }
+
+        .cart-icon:hover {
+            transform: scale(1.1);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--accent);
+            color: var(--text-dark);
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        /* ============ MAIN CONTAINER ============ */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ============ HERO SECTION ============ */
+        .hero {
+            background: linear-gradient(135deg, rgba(255, 87, 87, 0.1), rgba(255, 127, 127, 0.1));
+            padding: 50px 0;
+            border-radius: var(--border-radius);
+            margin: 30px 0;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        /* ============ FILTER SECTION ============ */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin: 30px 0;
+            overflow-x: auto;
+            padding-bottom: 15px;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--gray);
+            background: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text-dark);
+            white-space: nowrap;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(255, 87, 87, 0.05);
+        }
+
+        /* ============ RESTAURANTS GRID ============ */
+        .restaurants-section {
+            margin: 40px 0;
+        }
+
+        .section-title {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .restaurants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .restaurant-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1px solid var(--gray);
+        }
+
+        .restaurant-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 8px 24px rgba(255, 87, 87, 0.15);
+        }
+
+        .restaurant-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #ff5757, #ff7f7f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .restaurant-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.3), transparent);
+            pointer-events: none;
+        }
+
+        .restaurant-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .restaurant-info {
+            padding: 16px;
+        }
+
+        .restaurant-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .restaurant-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: rgba(76, 175, 80, 0.1);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #4caf50;
+        }
+
+        .restaurant-meta {
+            display: flex;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--text-light);
+            flex-wrap: wrap;
+        }
+
+        /* ============ ITEMS MODAL ============ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            padding-top: 30px;
+            padding-bottom: 30px;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 1000px;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(40px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #ff5757 0%, #ff7f7f 100%);
+            padding: 25px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .modal-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 24px;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: rotate(90deg);
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .item-card {
+            background: white;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+
+        .item-card:hover {
+            box-shadow: 0 8px 20px rgba(255, 87, 87, 0.15);
+            border-color: var(--primary);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            position: relative;
+        }
+
+        .item-info {
+            padding: 15px;
+        }
+
+        .item-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 6px;
+        }
+
+        .item-description {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .add-to-cart-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: var(--transition);
+        }
+
+        .add-to-cart-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.05);
+        }
+
+        /* ============ CART SIDEBAR ============ */
+        .cart-sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 400px;
+            background: white;
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+        }
+
+        .cart-sidebar.active {
+            transform: translateX(0);
+        }
+
+        .cart-header {
+            background: var(--secondary);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .cart-items-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .empty-cart-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 12px;
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            animation: slideInRight 0.3s ease-out;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .cart-item-image {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            flex-shrink: 0;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border-radius: 6px;
+            padding: 2px;
+            width: fit-content;
+        }
+
+        .qty-btn {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-weight: 700;
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .qty-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .qty-display {
+            font-weight: 600;
+            color: var(--text-dark);
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            color: #d32f2f;
+            cursor: pointer;
+            font-size: 18px;
+            margin-left: auto;
+            transition: var(--transition);
+        }
+
+        .remove-btn:hover {
+            transform: scale(1.2);
+        }
+
+        /* ============ CART SUMMARY ============ */
+        .cart-summary {
+            padding: 20px;
+            border-top: 2px solid var(--gray);
+            background: var(--light-gray);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: var(--text-dark);
+        }
+
+        .summary-row.total {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary);
+            border-top: 1px solid var(--gray);
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: var(--transition);
+        }
+
+        .checkout-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 87, 87, 0.3);
+        }
+
+        .checkout-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
+
+            .restaurants-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 15px;
+            }
+
+            .items-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+                gap: 15px;
+                padding: 15px;
+            }
+
+            .cart-sidebar {
+                width: 100%;
+            }
+
+            .modal-content {
+                width: 95%;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+        }
+
+        /* ============ SCROLLBAR ============ */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--light-gray);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
+        }
+    </style>
 </head>
 <body>
+    <!-- HEADER -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <span>🍕</span>
+                FoodHub
+            </div>
+            <div class="header-actions">
+                <div class="search-bar">
+                    <span>🔍</span>
+                    <input type="text" id="searchInput" placeholder="Search restaurants or food items...">
+                </div>
+                <div class="cart-icon" id="cartToggle">
+                    🛒
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<nav>
-  <div class="nav-logo">⚡ DevOps.io</div>
-  <ul class="nav-links">
-    <li><a href="#pipeline">Pipeline</a></li>
-    <li><a href="#stack">Stack</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+    <!-- MAIN CONTENT -->
+    <main>
+        <div class="container">
+            <!-- HERO SECTION -->
+            <section class="hero">
+                <h1>🚀 Order Food Delivered Fast</h1>
+                <p>Choose from thousands of restaurants and get your favorite food delivered in 30 minutes</p>
+            </section>
 
-<div class="hero">
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-badge"><span></span> Available for DevOps Projects</div>
-    <h1>Building <span class="gradient-text">Scalable</span><br/>Infrastructure</h1>
-    <p>Automating deployments, streamlining pipelines, and delivering reliable systems at scale. From code to cloud — faster than ever.</p>
-    <div class="hero-btns">
-      <a href="#projects" class="btn btn-primary">🚀 View Projects</a>
-      <a href="#contact" class="btn btn-secondary">✉️ Get in Touch</a>
+            <!-- FILTERS -->
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">All Restaurants</button>
+                <button class="filter-btn" data-filter="pizza">🍕 Pizza</button>
+                <button class="filter-btn" data-filter="burger">🍔 Burgers</button>
+                <button class="filter-btn" data-filter="chinese">🥢 Chinese</button>
+                <button class="filter-btn" data-filter="indian">🍛 Indian</button>
+                <button class="filter-btn" data-filter="dessert">🍰 Desserts</button>
+                <button class="filter-btn" data-filter="beverages">☕ Beverages</button>
+            </div>
+
+            <!-- RESTAURANTS GRID -->
+            <section class="restaurants-section">
+                <h2 class="section-title">Popular Restaurants</h2>
+                <div class="restaurants-grid" id="restaurantsGrid">
+                    <!-- Restaurants will be populated by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ITEMS MODAL -->
+    <div class="modal" id="itemsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="restaurantNameModal"></h2>
+                <button class="close-btn" onclick="closeModal()">✕</button>
+            </div>
+            <div class="items-grid" id="itemsGrid">
+                <!-- Items will be populated by JavaScript -->
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
-<div class="stats">
-  <div><div class="stat-num">12+</div><div class="stat-label">Projects Deployed</div></div>
-  <div><div class="stat-num">99.9%</div><div class="stat-label">Uptime Achieved</div></div>
-  <div><div class="stat-num">5x</div><div class="stat-label">Faster Deployments</div></div>
-  <div><div class="stat-num">3</div><div class="stat-label">Cloud Platforms</div></div>
-</div>
-
-<section id="pipeline">
-  <div class="section-tag">How It Works</div>
-  <h2 class="section-title">CI/CD Pipeline</h2>
-  <p class="section-sub">Every code push automatically triggers a full build, test, and deploy cycle — zero manual steps.</p>
-  <div class="pipeline">
-    <div class="pipe-step"><div class="pipe-icon">💻</div><div class="pipe-name">Code Push</div><div class="pipe-tech">Git / GitHub</div><div class="pipe-dot"></div></div>
-    <div class="pipe-step"><div class="pipe-icon">⚙️</div><div class="pipe-name">Build</div><div class="pipe-tech">GitHub Actions</div><div class="pipe-dot"></div></div>
-    <div class="pipe-step"><div class="pipe-icon">🧪</div><div class="pipe-name">Test</div><div class="pipe-tech">Jest / Pytest</div><div class="pipe-dot"></div></div>
-    <div class="pipe-step"><div class="pipe-icon">🐳</div><div class="pipe-name">Containerize</div><div class="pipe-tech">Docker</div><div class="pipe-dot"></div></div>
-    <div class="pipe-step"><div class="pipe-icon">🚀</div><div class="pipe-name">Deploy</div><div class="pipe-tech">Netlify / AWS</div><div class="pipe-dot"></div></div>
-  </div>
-  <div class="terminal">
-    <div class="term-bar">
-      <div class="term-dot" style="background:#ff5f57"></div>
-      <div class="term-dot" style="background:#febc2e"></div>
-      <div class="term-dot" style="background:#28c840"></div>
-      <div class="term-title">bash — pipeline.sh</div>
+    <!-- CART SIDEBAR -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-btn" onclick="toggleCart()" style="background: rgba(255, 255, 255, 0.2);">✕</button>
+        </div>
+        <div class="cart-items-container" id="cartItemsContainer">
+            <div class="empty-cart">
+                <div class="empty-cart-icon">🛒</div>
+                <p>Your cart is empty</p>
+                <p style="font-size: 12px; margin-top: 10px;">Add items from restaurants to get started</p>
+            </div>
+        </div>
+        <div class="cart-summary" id="cartSummary" style="display: none;">
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">₹0</span>
+            </div>
+            <div class="summary-row">
+                <span>Delivery Fee:</span>
+                <span id="deliveryFee">₹0</span>
+            </div>
+            <div class="summary-row">
+                <span>Tax:</span>
+                <span id="tax">₹0</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total:</span>
+                <span id="totalAmount">₹0</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
     </div>
-    <div class="term-body">
-      <div><span class="term-prompt">$ </span><span class="term-cmd">git push origin main</span></div>
-      <div class="term-out">Enumerating objects: 5 done.</div>
-      <div class="term-out">Writing objects: 100% (3/3), 1.23 KiB | 1.23 MiB/s, done.</div>
-      <div><span class="term-prompt">$ </span><span class="term-cmd">github-actions → trigger: push</span></div>
-      <div class="term-info">▶  Running workflow: deploy.yml</div>
-      <div class="term-out">&nbsp;&nbsp;✓ Install dependencies &nbsp;&nbsp;&nbsp;<span class="term-success">2.3s</span></div>
-      <div class="term-out">&nbsp;&nbsp;✓ Run tests (14 passed)&nbsp;&nbsp;<span class="term-success">8.1s</span></div>
-      <div class="term-out">&nbsp;&nbsp;✓ Build Docker image &nbsp;&nbsp;&nbsp;&nbsp;<span class="term-success">12.4s</span></div>
-      <div class="term-out">&nbsp;&nbsp;✓ Push to registry &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="term-success">4.2s</span></div>
-      <div class="term-success">✅ Deployed to production! Site live at https://myapp.netlify.app</div>
-    </div>
-  </div>
-</section>
 
-<div style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-<section id="stack" style="max-width: 1100px;">
-  <div class="section-tag">Tools & Technologies</div>
-  <h2 class="section-title">My Tech Stack</h2>
-  <p class="section-sub">The tools I use to build, ship, and monitor production-grade systems.</p>
-  <div class="tech-grid">
-    <div class="tech-card"><div class="tech-card-icon">🐙</div><div class="tech-card-name">GitHub Actions</div><div class="tech-card-desc">Automate workflows directly from your repo on every push or PR.</div><span class="tech-card-tag tag-blue">CI/CD</span></div>
-    <div class="tech-card"><div class="tech-card-icon">🐳</div><div class="tech-card-name">Docker</div><div class="tech-card-desc">Package apps into containers that run anywhere, consistently.</div><span class="tech-card-tag tag-blue">Container</span></div>
-    <div class="tech-card"><div class="tech-card-icon">☸️</div><div class="tech-card-name">Kubernetes</div><div class="tech-card-desc">Orchestrate and scale containerized workloads in production.</div><span class="tech-card-tag tag-purple">Orchestration</span></div>
-    <div class="tech-card"><div class="tech-card-icon">🌍</div><div class="tech-card-name">Terraform</div><div class="tech-card-desc">Define and provision cloud infrastructure as code.</div><span class="tech-card-tag tag-purple">IaC</span></div>
-    <div class="tech-card"><div class="tech-card-icon">☁️</div><div class="tech-card-name">AWS / GCP</div><div class="tech-card-desc">Deploy, scale, and manage apps on the world's top cloud platforms.</div><span class="tech-card-tag tag-orange">Cloud</span></div>
-    <div class="tech-card"><div class="tech-card-icon">📊</div><div class="tech-card-name">Grafana + Prometheus</div><div class="tech-card-desc">Real-time monitoring, dashboards, and alerting for all services.</div><span class="tech-card-tag tag-green">Monitoring</span></div>
-    <div class="tech-card"><div class="tech-card-icon">🔒</div><div class="tech-card-name">Vault</div><div class="tech-card-desc">Securely store and manage secrets, tokens, and credentials.</div><span class="tech-card-tag tag-orange">Security</span></div>
-    <div class="tech-card"><div class="tech-card-icon">🔧</div><div class="tech-card-name">Ansible</div><div class="tech-card-desc">Automate server configuration and application deployment.</div><span class="tech-card-tag tag-green">Automation</span></div>
-  </div>
-</section>
-</div>
+    <!-- OVERLAY -->
+    <div id="overlay" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.3); z-index: 500;" onclick="closeModal(); toggleCart();"></div>
 
-<section id="projects">
-  <div class="section-tag">Work</div>
-  <h2 class="section-title">Featured Projects</h2>
-  <p class="section-sub">Real-world DevOps projects built from scratch.</p>
-  <div class="project-card">
-    <div>
-      <div class="proj-title">🚀 Auto-Deploy Pipeline</div>
-      <div class="proj-desc">Built a full CI/CD pipeline using GitHub Actions. Every push to main triggers automated testing, Docker build, and live deployment to Netlify — completely hands-free.</div>
-      <div class="proj-tags"><span class="proj-tag">GitHub Actions</span><span class="proj-tag">Docker</span><span class="proj-tag">Netlify</span><span class="proj-tag">YAML</span></div>
-    </div>
-    <div class="proj-status">✅ Live</div>
-  </div>
-  <div class="project-card">
-    <div>
-      <div class="proj-title">🐳 Dockerized Microservice App</div>
-      <div class="proj-desc">Containerized a Node.js REST API with Docker Compose. Includes Nginx reverse proxy, PostgreSQL database, and Redis caching — all spun up with a single command.</div>
-      <div class="proj-tags"><span class="proj-tag">Docker Compose</span><span class="proj-tag">Node.js</span><span class="proj-tag">Nginx</span><span class="proj-tag">PostgreSQL</span></div>
-    </div>
-    <div class="proj-status">✅ Live</div>
-  </div>
-  <div class="project-card">
-    <div>
-      <div class="proj-title">📊 Infrastructure Monitoring Dashboard</div>
-      <div class="proj-desc">Set up Prometheus + Grafana to monitor server CPU, memory, and request latency. Configured custom alerts to Slack when thresholds are breached.</div>
-      <div class="proj-tags"><span class="proj-tag">Grafana</span><span class="proj-tag">Prometheus</span><span class="proj-tag">AWS EC2</span><span class="proj-tag">Slack Alerts</span></div>
-    </div>
-    <div class="proj-status" style="background:rgba(246,173,85,0.12);color:#f6ad55;border-color:rgba(246,173,85,0.2);">🔧 In Progress</div>
-  </div>
-</section>
+    <script>
+        // DATA
+        const restaurants = [
+            {
+                id: 1,
+                name: "Pizza Palace",
+                emoji: "🍕",
+                rating: 4.5,
+                time: "30 mins",
+                delivery: "Free",
+                cuisine: "pizza",
+                items: [
+                    { id: 1, name: "Margherita Pizza", emoji: "🍕", price: 299, desc: "Classic cheese pizza" },
+                    { id: 2, name: "Pepperoni Pizza", emoji: "🍕", price: 399, desc: "Loaded with pepperoni" },
+                    { id: 3, name: "Veggie Supreme", emoji: "🍕", price: 349, desc: "Loaded with vegetables" },
+                    { id: 4, name: "BBQ Chicken Pizza", emoji: "🍕", price: 449, desc: "Smoky BBQ chicken" }
+                ]
+            },
+            {
+                id: 2,
+                name: "Burger House",
+                emoji: "🍔",
+                rating: 4.3,
+                time: "25 mins",
+                delivery: "Free",
+                cuisine: "burger",
+                items: [
+                    { id: 5, name: "Classic Burger", emoji: "🍔", price: 199, desc: "Juicy beef patty" },
+                    { id: 6, name: "Double Cheese Burger", emoji: "🍔", price: 279, desc: "Double cheese delight" },
+                    { id: 7, name: "Chicken Burger", emoji: "🍗", price: 249, desc: "Crispy chicken patty" },
+                    { id: 8, name: "Veggie Burger", emoji: "🌱", price: 199, desc: "Healthy vegetarian" }
+                ]
+            },
+            {
+                id: 3,
+                name: "Spice Route",
+                emoji: "🥘",
+                rating: 4.6,
+                time: "35 mins",
+                delivery: "₹40",
+                cuisine: "indian",
+                items: [
+                    { id: 9, name: "Butter Chicken", emoji: "🍛", price: 349, desc: "Creamy tomato curry" },
+                    { id: 10, name: "Biryani", emoji: "🍚", price: 279, desc: "Fragrant rice dish" },
+                    { id: 11, name: "Paneer Tikka", emoji: "🍢", price: 299, desc: "Grilled cottage cheese" },
+                    { id: 12, name: "Dal Makhani", emoji: "🍛", price: 249, desc: "Creamy lentils" }
+                ]
+            },
+            {
+                id: 4,
+                name: "Dragon Wok",
+                emoji: "🥢",
+                rating: 4.4,
+                time: "28 mins",
+                delivery: "Free",
+                cuisine: "chinese",
+                items: [
+                    { id: 13, name: "Fried Rice", emoji: "🍚", price: 249, desc: "Egg fried rice" },
+                    { id: 14, name: "Noodles", emoji: "🍜", price: 229, desc: "Hakka noodles" },
+                    { id: 15, name: "Manchurian", emoji: "🥡", price: 289, desc: "Crispy vegetable balls" },
+                    { id: 16, name: "Sweet & Sour Chicken", emoji: "🍗", price: 329, desc: "Tangy chicken" }
+                ]
+            },
+            {
+                id: 5,
+                name: "Sweet Dreams",
+                emoji: "🍰",
+                rating: 4.7,
+                time: "20 mins",
+                delivery: "Free",
+                cuisine: "dessert",
+                items: [
+                    { id: 17, name: "Cheesecake", emoji: "🍰", price: 199, desc: "Creamy cheesecake slice" },
+                    { id: 18, name: "Chocolate Cake", emoji: "🍫", price: 179, desc: "Rich chocolate cake" },
+                    { id: 19, name: "Ice Cream Sundae", emoji: "🍨", price: 149, desc: "Vanilla with toppings" },
+                    { id: 20, name: "Brownie", emoji: "🍫", price: 99, desc: "Fudgy chocolate brownie" }
+                ]
+            },
+            {
+                id: 6,
+                name: "Brew Haven",
+                emoji: "☕",
+                rating: 4.5,
+                time: "15 mins",
+                delivery: "Free",
+                cuisine: "beverages",
+                items: [
+                    { id: 21, name: "Espresso", emoji: "☕", price: 79, desc: "Strong espresso shot" },
+                    { id: 22, name: "Cappuccino", emoji: "☕", price: 129, desc: "Creamy cappuccino" },
+                    { id: 23, name: "Iced Coffee", emoji: "🧊", price: 109, desc: "Cold coffee with ice" },
+                    { id: 24, name: "Smoothie", emoji: "🥤", price: 149, desc: "Fruit smoothie mix" }
+                ]
+            }
+        ];
 
-<div style="background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
-<section style="max-width: 700px;">
-  <div class="section-tag">Proficiency</div>
-  <h2 class="section-title">Skills</h2>
-  <div style="margin-top: 2rem;">
-    <div class="skill-row"><div class="skill-header"><span>GitHub Actions / CI-CD</span><span class="skill-pct">90%</span></div><div class="skill-track"><div class="skill-fill fill-blue" style="width:90%"></div></div></div>
-    <div class="skill-row"><div class="skill-header"><span>Docker & Containers</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill fill-blue" style="width:85%"></div></div></div>
-    <div class="skill-row"><div class="skill-header"><span>Linux & Bash Scripting</span><span class="skill-pct">80%</span></div><div class="skill-track"><div class="skill-fill fill-green" style="width:80%"></div></div></div>
-    <div class="skill-row"><div class="skill-header"><span>AWS Cloud Services</span><span class="skill-pct">70%</span></div><div class="skill-track"><div class="skill-fill fill-orange" style="width:70%"></div></div></div>
-    <div class="skill-row"><div class="skill-header"><span>Kubernetes</span><span class="skill-pct">60%</span></div><div class="skill-track"><div class="skill-fill fill-green" style="width:60%"></div></div></div>
-    <div class="skill-row"><div class="skill-header"><span>Terraform / IaC</span><span class="skill-pct">65%</span></div><div class="skill-track"><div class="skill-fill fill-orange" style="width:65%"></div></div></div>
-  </div>
-</section>
-</div>
+        let cart = [];
+        let selectedRestaurant = null;
 
-<section id="contact">
-  <div class="section-tag">Let's Talk</div>
-  <h2 class="section-title">Get in Touch</h2>
-  <p class="section-sub">Open to DevOps roles, freelance projects, and collaborations.</p>
-  <div class="contact-grid">
-    <a href="mailto:yourname@email.com" class="contact-card"><div class="contact-icon">✉️</div><div><div class="contact-label">Email</div><div class="contact-val">yourname@email.com</div></div></a>
-    <a href="https://github.com" target="_blank" class="contact-card"><div class="contact-icon">🐙</div><div><div class="contact-label">GitHub</div><div class="contact-val">github.com/yourname</div></div></a>
-    <a href="https://linkedin.com" target="_blank" class="contact-card"><div class="contact-icon">💼</div><div><div class="contact-label">LinkedIn</div><div class="contact-label">Connect with me</div></div></a>
-    <a href="#" class="contact-card"><div class="contact-icon">📄</div><div><div class="contact-label">Resume</div><div class="contact-val">Download PDF</div></div></a>
-  </div>
-</section>
+        // INITIALIZE
+        function init() {
+            renderRestaurants();
+            setupEventListeners();
+        }
 
-<footer>Built with ❤️ and deployed via <span>GitHub Actions + Netlify</span> · © 2025</footer>
+        // RENDER RESTAURANTS
+        function renderRestaurants(filter = 'all') {
+            const grid = document.getElementById('restaurantsGrid');
+            let filtered = restaurants;
+
+            if (filter !== 'all') {
+                filtered = restaurants.filter(r => r.cuisine === filter);
+            }
+
+            grid.innerHTML = filtered.map(restaurant => `
+                <div class="restaurant-card" onclick="openRestaurant(${restaurant.id})">
+                    <div class="restaurant-image">
+                        ${restaurant.emoji}
+                        <span class="restaurant-badge">${restaurant.rating} ⭐</span>
+                    </div>
+                    <div class="restaurant-info">
+                        <div class="restaurant-name">${restaurant.name}</div>
+                        <div class="restaurant-details">
+                            <span class="rating">${restaurant.rating}</span>
+                            <span>⏱️ ${restaurant.time}</span>
+                        </div>
+                        <div class="restaurant-meta">
+                            <span>🚚 ${restaurant.delivery}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // OPEN RESTAURANT MODAL
+        function openRestaurant(restaurantId) {
+            selectedRestaurant = restaurants.find(r => r.id === restaurantId);
+            document.getElementById('restaurantNameModal').textContent = selectedRestaurant.name;
+            
+            const itemsGrid = document.getElementById('itemsGrid');
+            itemsGrid.innerHTML = selectedRestaurant.items.map(item => `
+                <div class="item-card">
+                    <div class="item-image">${item.emoji}</div>
+                    <div class="item-info">
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-description">${item.desc}</div>
+                        <div class="item-footer">
+                            <span class="item-price">₹${item.price}</span>
+                            <button class="add-to-cart-btn" onclick="addToCart(${item.id}, '${item.name}', ${item.price}, '${item.emoji}')">Add</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('itemsModal').classList.add('active');
+            document.getElementById('overlay').style.display = 'block';
+        }
+
+        // CLOSE MODAL
+        function closeModal() {
+            document.getElementById('itemsModal').classList.remove('active');
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+        // ADD TO CART
+        function addToCart(itemId, itemName, itemPrice, itemEmoji) {
+            const existingItem = cart.find(item => item.id === itemId);
+
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({
+                    id: itemId,
+                    name: itemName,
+                    price: itemPrice,
+                    emoji: itemEmoji,
+                    quantity: 1
+                });
+            }
+
+            updateCart();
+            showNotification(`${itemName} added to cart!`);
+        }
+
+        // UPDATE CART
+        function updateCart() {
+            const cartCount = document.getElementById('cartCount');
+            const cartItemsContainer = document.getElementById('cartItemsContainer');
+            const cartSummary = document.getElementById('cartSummary');
+
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `
+                    <div class="empty-cart">
+                        <div class="empty-cart-icon">🛒</div>
+                        <p>Your cart is empty</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Add items from restaurants to get started</p>
+                    </div>
+                `;
+                cartSummary.style.display = 'none';
+            } else {
+                cartItemsContainer.innerHTML = cart.map(item => `
+                    <div class="cart-item">
+                        <div class="cart-item-image">${item.emoji}</div>
+                        <div class="cart-item-details">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-price">₹${item.price}</div>
+                            <div class="cart-item-controls">
+                                <button class="qty-btn" onclick="updateQuantity(${item.id}, -1)">−</button>
+                                <span class="qty-display">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                        <span class="remove-btn" onclick="removeFromCart(${item.id})">✕</span>
+                    </div>
+                `).join('');
+                cartSummary.style.display = 'block';
+                updateSummary();
+            }
+        }
+
+        // UPDATE QUANTITY
+        function updateQuantity(itemId, change) {
+            const item = cart.find(i => i.id === itemId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    removeFromCart(itemId);
+                } else {
+                    updateCart();
+                }
+            }
+        }
+
+        // REMOVE FROM CART
+        function removeFromCart(itemId) {
+            cart = cart.filter(item => item.id !== itemId);
+            updateCart();
+        }
+
+        // UPDATE SUMMARY
+        function updateSummary() {
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const deliveryFee = subtotal > 0 ? 40 : 0;
+            const tax = Math.round(subtotal * 0.05);
+            const total = subtotal + deliveryFee + tax;
+
+            document.getElementById('subtotal').textContent = `₹${subtotal}`;
+            document.getElementById('deliveryFee').textContent = `₹${deliveryFee}`;
+            document.getElementById('tax').textContent = `₹${tax}`;
+            document.getElementById('totalAmount').textContent = `₹${total}`;
+        }
+
+        // TOGGLE CART
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('active');
+            document.getElementById('overlay').style.display = 
+                document.getElementById('cartSidebar').classList.contains('active') ? 'block' : 'none';
+        }
+
+        // CHECKOUT
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            const total = document.getElementById('totalAmount').textContent;
+            alert(`Order placed successfully!\nTotal: ${total}\n\nYour order will be delivered in 30-45 minutes.`);
+            cart = [];
+            updateCart();
+            toggleCart();
+        }
+
+        // SETUP EVENT LISTENERS
+        function setupEventListeners() {
+            document.getElementById('cartToggle').addEventListener('click', toggleCart);
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    renderRestaurants(btn.dataset.filter);
+                });
+            });
+
+            document.getElementById('searchInput').addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase();
+                const grid = document.getElementById('restaurantsGrid');
+                const filtered = restaurants.filter(r => 
+                    r.name.toLowerCase().includes(searchTerm)
+                );
+                grid.innerHTML = filtered.map(restaurant => `
+                    <div class="restaurant-card" onclick="openRestaurant(${restaurant.id})">
+                        <div class="restaurant-image">
+                            ${restaurant.emoji}
+                            <span class="restaurant-badge">${restaurant.rating} ⭐</span>
+                        </div>
+                        <div class="restaurant-info">
+                            <div class="restaurant-name">${restaurant.name}</div>
+                            <div class="restaurant-details">
+                                <span class="rating">${restaurant.rating}</span>
+                                <span>⏱️ ${restaurant.time}</span>
+                            </div>
+                            <div class="restaurant-meta">
+                                <span>🚚 ${restaurant.delivery}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // NOTIFICATION
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--primary);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 2000;
+                animation: slideInRight 0.3s ease-out;
+                font-weight: 600;
+            `;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.remove(), 2000);
+        }
+
+        // START
+        init();
+    </script>
 </body>
 </html>
-
