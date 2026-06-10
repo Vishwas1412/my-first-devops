@@ -13,7 +13,7 @@ pipeline {
             steps {
                 bat 'docker stop foodhub-container || exit 0'
                 bat 'docker rm foodhub-container || exit 0'
-                bat 'docker run -d -p 8080:80 --name foodhub-container foodhub'
+                bat 'docker run -d -p 8081:80 --name foodhub-container foodhub'
             }
         }
     }
