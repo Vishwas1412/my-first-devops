@@ -3,21 +3,17 @@ pipeline {
 
     stages {
 
-        stage('Build') {
+        stage('Build Docker Image') {
             steps {
-                echo 'Building FoodHub application'
+                bat 'docker build -t foodhub .'
             }
         }
 
-        stage('Test') {
+        stage('Run Docker Container') {
             steps {
-                echo 'Testing FoodHub application'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying FoodHub application'
+                bat 'docker stop foodhub-container || exit 0'
+                bat 'docker rm foodhub-container || exit 0'
+                bat 'docker run -d -p 8080:80 --name foodhub-container foodhub'
             }
         }
     }
